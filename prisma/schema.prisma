@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Category {
+  category_id String    @id @default(uuid())
+  name        String
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  products    Product[]
+}
+
+model Product {
+  product_id  String      @id @default(uuid())
+  name        String
+  description String?
+  sku         String      @unique
+  status      String      @default("activo")
+  category_id String
+  created_at  DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?   @updatedAt @db.Timestamp(6)
+  images      Image[]
+  inventory   Inventory[]
+  category    Category    @relation(fields: [category_id], references: [category_id])
+  sizes       Size[]      @relation("ProductToSize")
+  CartItem    CartItem[]
+  OrderItem   OrderItem[]
+}
+
+model Image {
+  image_id   String  @id @default(uuid())
+  image_url  String
+  image_text String?
+  type       String?
+  product_id String
+  product    Product @relation(fields: [product_id], references: [product_id])
+}
+
+model Size {
+  size_id   String      @id @default(uuid())
+  size      String
+  inventory Inventory[]
+  product   Product[]   @relation("ProductToSize")
+  CartItem  CartItem[]
+  OrderItem OrderItem[]
+}
+
+model Inventory {
+  inventory_id String  @id @default(uuid())
+  quantity     Int
+  product_id   String
+  size_id      String?
+  price        Float?
+  product      Product @relation(fields: [product_id], references: [product_id])
+  size         Size?   @relation(fields: [size_id], references: [size_id])
+}
+
+// Modelos para el carrito de compras y las ordenes
+model Cart {
+  cart_id    String     @id @default(uuid())
+  user_id    String
+  created_at DateTime   @default(now()) @db.Timestamp(6)
+  updated_at DateTime?  @updatedAt @db.Timestamp(6)
+  items      CartItem[]
+}
+
+model CartItem {
+  cart_item_id String  @id @default(uuid())
+  cart_id      String
+  product_id   String
+  size_id      String?
+  quantity     Int     @default(1)
+  price        Float
+  cart         Cart    @relation(fields: [cart_id], references: [cart_id])
+  product      Product @relation(fields: [product_id], references: [product_id])
+  size         Size?   @relation(fields: [size_id], references: [size_id])
+}
+
+model Order {
+  order_id     String      @id @default(uuid())
+  user_id      String
+  status       String      @default("pendiente")
+  total_amount Float
+  created_at   DateTime    @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?   @updatedAt @db.Timestamp(6)
+  items        OrderItem[]
+}
+
+model OrderItem {
+  order_item_id String  @id @default(uuid())
+  order_id      String
+  product_id    String
+  size_id       String?
+  quantity      Int     @default(1)
+  price         Float
+  order         Order   @relation(fields: [order_id], references: [order_id])
+  product       Product @relation(fields: [product_id], references: [product_id])
+  size          Size?   @relation(fields: [size_id], references: [size_id])
+}
