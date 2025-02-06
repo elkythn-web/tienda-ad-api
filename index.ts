@@ -1,9 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { db } from './config/db.js';
+import cors from "cors";
 import { Request, Response } from 'express';
-import productRouter from './routes/products/productRoute';
 import categoryRouter from './routes/products/categoryRoute';
+import productRouter from './routes/products/productRoute';
 import imageRouter from './routes/products/imageRoute';
 import stockRouter from './routes/products/stockRoute';
 import sizeRouter from './routes/products/sizeRoute';
@@ -16,6 +17,14 @@ db();
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cors())
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
 
 app.get('/api', (req: Request, res: Response) => {
     res.json('API de productos');

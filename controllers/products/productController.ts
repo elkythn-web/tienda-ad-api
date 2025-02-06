@@ -17,6 +17,7 @@ const getProducts = async (req: Request, res: Response) => {
                 },
                 images: {
                     select: {
+                        image_id: true,
                         image_url: true,
                         image_text: true,
                         type: true
@@ -26,6 +27,7 @@ const getProducts = async (req: Request, res: Response) => {
                     select: {
                         quantity: true,
                         price: true,
+                        status: true,
                         size: {
                             select: {
                                 size: true
@@ -58,6 +60,7 @@ const getProductBySKU = async (req: Request, res: Response) => {
                 },
                 images: {
                     select: {
+                        image_id: true,
                         image_url: true,
                         image_text: true,
                         type: true
@@ -67,6 +70,7 @@ const getProductBySKU = async (req: Request, res: Response) => {
                     select: {
                         quantity: true,
                         price: true,
+                        status: true,
                         size: {
                             select: {
                                 size: true
@@ -83,6 +87,50 @@ const getProductBySKU = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({error: 'Error al obtener el producto'});
     }
+};
+
+const getProductByID = async (req: Request, res: Response) => {
+    // try {
+    //     const {product_id} = req.params;
+    //     const product = await prisma.product.findFirst({
+    //         select: {
+    //             product_id: true,
+    //             name: true,
+    //             description: true,
+    //             sku: true,
+    //             status: true,
+    //             category: {
+    //                 select: {
+    //                     name: true
+    //                 }
+    //             },
+    //             images: {
+    //                 select: {
+    //                     image_url: true,
+    //                     image_text: true,
+    //                     type: true
+    //                 }
+    //             },
+    //             inventory: {
+    //                 select: {
+    //                     quantity: true,
+    //                     price: true,
+    //                     size: {
+    //                         select: {
+    //                             size: true
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         where: {
+    //             sku: product_id
+    //         }
+    //     });
+    //     res.json(product);
+    // } catch (error) {
+    //     res.status(500).json({error: 'Error al obtener el producto'});
+    // }
 };
 
 const createProduct = async (req: Request, res: Response) => {
@@ -159,6 +207,7 @@ const deleteProduct = async (req: Request, res: Response) => {
 export {
     getProducts,
     getProductBySKU,
+    getProductByID,
     createProduct,
     updateProduct,
     deleteProduct
