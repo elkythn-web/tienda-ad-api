@@ -5,7 +5,9 @@ import {
     getProductByID,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    activateProduct,
+    updateCompleteProduct
 }  from '../../controllers/products/productController';
 
 const router = express.Router();
@@ -15,6 +17,9 @@ router.get('/:sku', getProductBySKU);
 router.get('/:product_id', getProductByID);
 router.post('/create', createProduct);
 router.put('/update/:sku', updateProduct);
+router.put('/update-complete/:sku', updateCompleteProduct);
 router.delete('/delete/:sku', deleteProduct);
+router.put('/activate/:sku', activateProduct);
+
 
 export default router;

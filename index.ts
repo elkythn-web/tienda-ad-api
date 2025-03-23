@@ -14,10 +14,9 @@ const port = process.env.PORT || 5000;
 
 //TODO: Conectar a la base de datos
 db();
-
-app.use(express.json());
+// app.use(express.json({ limit: '10mb' }));
+// app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(bodyParser.json());
-app.use(cors())
 
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -29,6 +28,7 @@ app.use(cors(corsOptions));
 app.get('/api', (req: Request, res: Response) => {
     res.json('API de productos');
 });
+
 
 app.use('/api/products', productRouter);
 app.use('/api/categories', categoryRouter);
