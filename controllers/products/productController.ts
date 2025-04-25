@@ -333,6 +333,11 @@ const deleteProduct = async (req: Request, res: Response) => {
 
 const activateProduct = async (req: Request, res: Response) => {
     const {sku} = req.params;
+    const {status} = req.body;
+
+    if (!status) {
+        return res.status(400).json({error: 'Falta el estado del producto'});
+    }
 
     try {
         await prisma.product.update({
@@ -340,7 +345,7 @@ const activateProduct = async (req: Request, res: Response) => {
                 sku: sku
             },
             data: {
-                status: 'activo'
+                status: status
             }
         });
         res.status(200).json({message: 'Producto activado'});

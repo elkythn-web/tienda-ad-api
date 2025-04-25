@@ -5,7 +5,9 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": " bun --hot run index.ts"
+    "dev": " bun --hot run index.ts",
+    "build": "npm run clean && tsc",
+    "start": "node dist/index.js",
   },
   "keywords": [],
   "author": "",
