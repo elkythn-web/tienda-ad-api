@@ -30,11 +30,11 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 
-app.use('/api/products', productRouter);
-app.use('/api/categories', categoryRouter);
-app.use('/api/images', imageRouter);
-app.use('/api/stock', stockRouter);
-app.use('/api/sizes', sizeRouter);
+app.use('/api/v1/products', productRouter);
+app.use('/api/v1/categories', categoryRouter);
+app.use('/api/v1/images', imageRouter);
+app.use('/api/v1/stock', stockRouter);
+app.use('/api/v1/sizes', sizeRouter);
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
