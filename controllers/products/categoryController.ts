@@ -7,7 +7,10 @@ const getCategories = async (req: Request, res: Response) => {
             {
                 select: {
                     category_id: true,
-                    name: true
+                    name: true,
+                    description: true,
+                    status: true,
+                    created_at: true,
                 }
             }
         );
@@ -19,7 +22,7 @@ const getCategories = async (req: Request, res: Response) => {
 
 const createCategory = async (req: Request, res: Response) => {
 
-    const {name} = req.body;
+    const { name, description } = req.body;
 
     if (name === '') {
         return res.status(400).json({ error: 'name no puede estar vacío' });
@@ -28,7 +31,8 @@ const createCategory = async (req: Request, res: Response) => {
     try {
         const category = await prisma.category.create({
             data: {
-                name: name
+                name: name,
+                description: description
             }
         });
         res.status(201).json({ message: 'Categoría creada' });
@@ -36,10 +40,11 @@ const createCategory = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Error al crear la categoría' });
     }
 };
+
 const updateCategory = async (req: Request, res: Response) => {
 
     const { category_id }  = req.params
-    const {name} = req.body;
+    const {name, description } = req.body;
 
     if (name === '') {
         return res.status(400).json({ error: 'name no puede estar vacío' });
@@ -51,7 +56,8 @@ const updateCategory = async (req: Request, res: Response) => {
                 category_id: category_id,
             },
             data: {
-                name: name
+                name: name,
+                description: description
             }
         });
         res.status(200).json({message: 'Categoría actualizada'});
@@ -80,5 +86,27 @@ const deleteCategory = async (req: Request, res: Response) => {
     }
 };
 
+const updateCategoryStatus = async (req: Request, res: Response) => {
+    const { category_id } = req.params;
+    const { status } = req.body;
 
-export { getCategories, createCategory, updateCategory, deleteCategory };
+    if (category_id === '') {
+        return res.status(400).json({ error: 'category_id debe ser un número válido' });
+    }
+
+    try {
+        await prisma.category.update({
+            where: {
+                category_id: category_id
+            },
+            data: {
+                status: status
+            }
+        });
+        res.status(200).json({message: 'Categoría actualizada'});
+    } catch (error) {
+        res.status(500).json({error: 'Error al actualizar la categoría'});
+    }
+}
+
+export { getCategories, createCategory, updateCategory, deleteCategory, updateCategoryStatus };
