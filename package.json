@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": " bun --hot run index.ts",
-    "build": "tsc && bun run build"
+    "build": "bun run index.ts"
   },
   "keywords": [],
   "author": "",
