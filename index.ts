@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { db } from './config/db.js';
 import cors from "cors";
 import { Request, Response } from 'express';
+import { routeLog } from './middleware/routeLog.js';
 import categoryRouter from './routes/products/categoryRoute';
 import productRouter from './routes/products/productRoute';
 import imageRouter from './routes/products/imageRoute';
@@ -25,11 +26,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Middleware para saber quien esta accediendo a la API mediante la IP
-app.use((req: Request, res: Response, next) => {
-    console.log(`IP: ${req.ip} - Ruta: ${req.originalUrl}`);
-    next();
-});
+app.use(routeLog);
 
 app.get('/api', (req: Request, res: Response) => {
     res.json('API de productos');
