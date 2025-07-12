@@ -25,6 +25,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Middleware para saber quien esta accediendo a la API mediante la IP
+app.use((req: Request, res: Response, next) => {
+    console.log(`IP: ${req.ip} - Ruta: ${req.originalUrl}`);
+    next();
+});
+
 app.get('/api', (req: Request, res: Response) => {
     res.json('API de productos');
 });
